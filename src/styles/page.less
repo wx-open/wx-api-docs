@@ -1,0 +1,78 @@
+@import 'reset';
+@import 'theme';
+
+.v-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &-app {
+    height: 100%;
+  }
+
+  &-header {
+    height: 60px;
+    box-shadow: 0 0 8px rgba(208, 208, 208, 0.4);
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+  }
+
+  &-entry {
+    padding: 0 20px;
+    line-height: 60px;
+  }
+
+  &-search {
+    align-self: center;
+    padding: 50px;
+  }
+
+  &-logo {
+    padding: 13px 20px;
+    display: flex;
+    align-items: center;
+    fill: @v-theme-primary-color;
+    color: @v-theme-primary-color;
+
+    &-title {
+      padding: 0 10px;
+      cursor: default;
+
+      a {
+        text-decoration: none;
+        color: @v-theme-primary-color;
+      }
+    }
+
+    img {
+      height: 34px;
+      margin-left: 15px;
+    }
+  }
+
+  &-body {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+  }
+
+  &-markdown {
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+.v-page-icon {
+  font-size: 16px;
+  color: @v-theme-primary-color;
+  fill: @v-theme-primary-color;
+  width: 34px;
+  height: 34px;
+
+  > svg {
+    height: 100%;
+    width: 100%;
+  }
+}

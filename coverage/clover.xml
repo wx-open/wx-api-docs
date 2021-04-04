@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1617523126994" clover="3.2.0">
+  <project timestamp="1617523126994" name="All files">
+    <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0" elements="4" coveredelements="2" complexity="0" loc="3" ncloc="3" packages="1" files="1" classes="1"/>
+    <file name="data.ts" path="D:\Develop\2021\wx-open\wx-api-docs\src\data.ts">
+      <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="6" count="0" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

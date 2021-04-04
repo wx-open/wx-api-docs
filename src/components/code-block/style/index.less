@@ -1,0 +1,54 @@
+@import "../../../styles/theme";
+
+.v-code-source-container {
+  > pre {
+    background: rgb(249, 249, 249) !important;
+    font-size: 14px !important;
+  }
+
+  position: relative;
+
+  &:hover {
+    .v-code-source-copy {
+      display: block;
+    }
+  }
+}
+
+.v-code-source-copy {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: none;
+
+  &:hover {
+    svg {
+      fill: #0c985a;
+    }
+  }
+}
+
+.v-code-section {
+  border: 1px solid #eeecec;
+  padding: 20px;
+
+
+  &:hover {
+    border-color: @v-theme-primary-color;
+  }
+}
+
+.v-code-section-container + .v-code-section-container {
+  margin-top: 20px;
+}
+.v-md-section-container + .v-md-section-container {
+  margin-top: 20px;
+}
+
+.v-code-block {
+  border: 1px solid #ddd;
+  padding: 10px;
+  min-width: 400px;
+  min-height: 240px;
+}
+

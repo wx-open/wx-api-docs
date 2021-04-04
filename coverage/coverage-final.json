@@ -1,0 +1,2 @@
+{"D:\\Develop\\2021\\wx-open\\wx-api-docs\\src\\data.ts": {"path":"D:\\Develop\\2021\\wx-open\\wx-api-docs\\src\\data.ts","statementMap":{"0":{"start":{"line":1,"column":0},"end":{"line":4,"column":2}},"1":{"start":{"line":6,"column":2},"end":{"line":6,"column":19}},"2":{"start":{"line":8,"column":9},"end":{"line":8,"column":15}}},"fnMap":{"0":{"name":"loadMd","decl":{"start":{"line":5,"column":9},"end":{"line":5,"column":15}},"loc":{"start":{"line":5,"column":26},"end":{"line":7,"column":1}}}},"branchMap":{},"s":{"0":1,"1":0,"2":1},"f":{"0":0},"b":{}}
+}
