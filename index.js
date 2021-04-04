@@ -3,7 +3,7 @@ const os = require('os');
 const webpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 const getWebpackConfig = require('./config/webpack.config');
-const { getDevServerOutputDir } = require('./config/base');
+const { getDevServerOutputDir, getWxConfig } = require('./config/base');
 const chalk = require('chalk');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -80,11 +80,14 @@ function build() {
   });
 }
 
-function start() {
+function start(wrapper = (a) => a) {
   const webpackConfig = getWebpackConfig({
     mode: 'development',
   });
   const contentBase = getDevServerOutputDir();
+  const wxConfig = getWxConfig();
+  const serverWrapper = wxConfig.server || ((a) => a);
+  const configPort = wxConfig.port || 8020;
   webpackConfig.output.path = contentBase;
   // webpackConfig.module.rules.push({ enforce: "pre", test: /\.js$/, loader: "source-map-loader" });
   const compiler = webpack(webpackConfig);
@@ -93,7 +96,7 @@ function start() {
     hot: true,
     inline: true,
     historyApiFallback: true,
-    port: 8020,
+    port: configPort,
     open: false,
     noInfo: true,
     https: false,
@@ -114,10 +117,12 @@ function start() {
       children: false,
     },
   };
-  const port = devServerOptions.port;
-  const host = devServerOptions.host;
-  const https = devServerOptions.https;
-  const server = new webpackDevServer(compiler, devServerOptions);
+  const callTempOptions = wrapper(devServerOptions) || devServerOptions;
+  const finalOptions = serverWrapper(callTempOptions) || callTempOptions;
+  const port = finalOptions.port;
+  const host = finalOptions.host;
+  const https = finalOptions.https;
+  const server = new webpackDevServer(compiler, finalOptions);
   server.listen(port, host, (err) => {
     if (err) {
       console.error('ERROR:', err);
@@ -133,6 +138,7 @@ function start() {
       console.log(`      LAN: ${chalk.cyan(`${protocol}://${localIP}:${port}/`)}`);
     }
   });
+  return server;
 }
 
 function getLocalIp() {
@@ -147,5 +153,5 @@ function getLocalIp() {
   }
   return null;
 }
-
+0;
 module.exports = { ans, build, start };

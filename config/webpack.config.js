@@ -25,6 +25,7 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
   const devtool = isDev ? 'source-map' : 'none';
   const minimize = options.minimize || !isDev;
   const wxConfig = getWxConfig();
+  const configWrapper = wxConfig.webpack || ((a) => a);
   const htmlTitle = wxConfig.inject.title || 'Wx API Docs';
   const htmlIcon = wxConfig.inject.favicon || path.resolve(root, 'src/assets/favicon.ico');
   const injectScripts = wxConfig.injectScripts || [];
@@ -247,5 +248,6 @@ All rights reserved.
       }),
     ],
   };
-  return webpackMerge(config, extraConfig);
+  const result = webpackMerge(config, extraConfig);
+  return configWrapper(result) || result;
 };

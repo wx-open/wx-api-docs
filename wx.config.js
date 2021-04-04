@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 module.exports = {
   inject: {
@@ -5,11 +6,6 @@ module.exports = {
     favicon: '',
     logo: '',
   },
-  injectScripts: [
-    'http://static.assure.com/js/lib/react/16.8.6/umd/react.production.min.js',
-    'http://static.assure.com/js/lib/react-dom/16.8.6/umd/react-dom.production.min.js',
-  ],
-  injectStyles: ['http://static.assure.com/css/common/github-markdown-css/3.0.1/github-markdown.css'],
   cwd: path.resolve(__dirname, './src'),
   template: path.resolve(__dirname, './src'),
   groups: [
@@ -20,4 +16,11 @@ module.exports = {
       basePath: './components',
     },
   ],
+  port: 9001,
+  webpack(config) {
+    return config;
+  },
+  server(options) {
+    return options;
+  },
 };
