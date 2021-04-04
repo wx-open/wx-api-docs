@@ -153,5 +153,4 @@ function getLocalIp() {
   }
   return null;
 }
-0;
 module.exports = { ans, build, start };
