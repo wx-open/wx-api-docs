@@ -24,8 +24,8 @@ npm run build
 MIT
 
 
-[npm]: https://img.shields.io/npm/v/@wx-open/wx-api-docs
-[npm-url]: https://www.npmjs.com/package/@wx-open/wx-api-docs
+[npm]: https://img.shields.io/npm/v/wx-api-docs
+[npm-url]: https://www.npmjs.com/package/wx-api-docs
 
 [deps]: https://img.shields.io/david/webpack/webpack.svg
 [deps-url]: #
