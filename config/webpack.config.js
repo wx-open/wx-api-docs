@@ -182,7 +182,9 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
           test: /\.(png|jpg|gif|eot|ttf|woff|woff2)$/,
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 15360,
+            name: 'assets/[hash:8].[name].[ext]',
+            fallback: 'file-loader',
           },
         },
         {
