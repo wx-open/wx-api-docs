@@ -13,6 +13,7 @@ export interface MenuNode {
     name: string;
     toc: string;
     contextPath: string;
+    only: string;
   }
 }
 

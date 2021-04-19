@@ -88,7 +88,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
           </div>
           <div style={{ marginTop: 20 }}>
             {sections.map((i) => {
-              if (i.data.toc === 'true') {
+              if (i.data.toc === 'true' || i.data.only === 'true') {
                 return (
                   <div key={i.data.route} className='v-md-section-container'>
                     <MdSection meta={i} />

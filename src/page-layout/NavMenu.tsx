@@ -13,6 +13,7 @@ interface MenuNode {
   data: {
     title: string;
     route: string;
+    toc?: string;
   };
 }
 
@@ -38,7 +39,7 @@ const Sider: React.FunctionComponent<SiderProps> = (props) => {
 
   const renderMenu = (data: MenuNode[], depth = 0) => {
     return data.map((item) => {
-      if (item.children?.length && depth < 1) {
+      if (item.children?.filter(i => i.data?.toc === 'true').length && depth < 1) {
         return (
           <SubMenu key={item.id} title={item.id}>
             {renderMenu(item.children, depth + 1)}

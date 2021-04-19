@@ -11,7 +11,7 @@ module.exports = {
       version: 'detect',
     },
   },
-  plugins: ['import', 'typescript', '@typescript-eslint', 'react', 'jsx-control-statements', 'prettier'],
+  plugins: ['import', '@typescript-eslint', 'react', 'jsx-control-statements', 'prettier'],
   env: {
     browser: true,
     node: true,
