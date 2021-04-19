@@ -2,6 +2,7 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown/with-html';
 import gfm from 'remark-gfm';
 import CodeBox from '../code-block/CodeBox';
+import { loadAssets } from '../../data';
 
 export interface MdBlockProps {
   content: string;
@@ -20,6 +21,14 @@ class MdBlock extends React.Component<MdBlockProps, any> {
         <ReactMarkdown
           className='markdown-body'
           allowDangerousHtml
+          transformImageUri={(uri => {
+            const reg = /^wx:\/\/(.+?\.(?:jpg|png|bmp|gif|webp|jpeg))$/;
+            if (reg.test(uri)) {
+              const [, path] = uri.match(reg)!;
+              return loadAssets(path);
+            }
+            return uri;
+          })}
           allowNode={(node, index, parent) => {
             if (node.type === 'html') {
               // filter style

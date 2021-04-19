@@ -1,6 +1,6 @@
 {
   "name": "wx-api-docs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a simple docs from markdown",
   "main": "index.js",
   "types": "index.d.ts",
