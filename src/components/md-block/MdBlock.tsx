@@ -19,25 +19,32 @@ class MdBlock extends React.Component<MdBlockProps, any> {
     return (
       <div>
         <ReactMarkdown
-          className='markdown-body'
+          className="markdown-body"
           allowDangerousHtml
-          transformImageUri={(uri => {
+          transformImageUri={(uri) => {
             const reg = /^wx:\/\/(.+?\.(?:jpg|png|bmp|gif|webp|jpeg))$/;
             if (reg.test(uri)) {
               const [, path] = uri.match(reg)!;
               return loadAssets(path);
             }
             return uri;
-          })}
+          }}
           allowNode={(node, index, parent) => {
             if (node.type === 'html') {
               // filter style
-              node.value = (node.value as string).replace(/<((style|script|link|input|form)|\/(style|script|link|input|form))(\s?[^>]*>)/gi, (a: string) => {
-                return a.replace(/[<>]/g, (e: string) => (({
-                  '<': '&lt;',
-                  '>': '&gt;',
-                } as { [key: string]: string })[e]));
-              });
+              node.value = (node.value as string).replace(
+                /<((style|script|link|input|form)|\/(style|script|link|input|form))(\s?[^>]*>)/gi,
+                (a: string) => {
+                  return a.replace(
+                    /[<>]/g,
+                    (e: string) =>
+                      (({
+                        '<': '&lt;',
+                        '>': '&gt;',
+                      } as { [key: string]: string })[e])
+                  );
+                }
+              );
             }
             return true;
           }}

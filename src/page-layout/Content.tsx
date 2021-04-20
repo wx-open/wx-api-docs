@@ -15,11 +15,7 @@ class Content extends React.Component<ContentProps, any> {
     return (
       <LocalContext.Consumer>
         {({ meta }) => {
-          return (
-            <Row>
-              {this.props.children}
-            </Row>
-          );
+          return <Row>{this.props.children}</Row>;
         }}
       </LocalContext.Consumer>
     );

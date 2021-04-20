@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Key } from 'react';
 import Content from '../../page-layout/Content';
 import { getNodeByRoute, LocalContext } from '../../context';
 import { Col } from 'antd';
@@ -12,13 +13,30 @@ export interface ComponentPageProps extends RouteComponentProps<{ id: string }> 
   route: string;
 }
 
-class ComponentPage extends React.Component<ComponentPageProps, any> {
+export interface ComponentPageState {
+  selectedKeys: Key[];
+}
+
+class ComponentPage extends React.Component<ComponentPageProps, ComponentPageState> {
   static propTypes = {};
   static defaultProps = {};
+  state = {
+    selectedKeys: [],
+  };
+
+  static getDerivedStateFromProps(nextProps: ComponentPageProps, prevState: ComponentPageState) {
+    const nextPath = nextProps.location.pathname;
+    return nextPath === prevState.selectedKeys[0]
+      ? null
+      : {
+          selectedKeys: [nextPath],
+        };
+  }
 
   render() {
     const { route } = this.props;
     const { id } = this.props.match.params;
+    const { selectedKeys } = this.state;
     return (
       <PageLayout>
         <Content activeId={id}>
@@ -39,7 +57,12 @@ class ComponentPage extends React.Component<ComponentPageProps, any> {
                   <>
                     <DocumentTitle title={`${inject.title}-文档走丢了`} />
                     <Col span={6}>
-                      <Sider data={nodes} openKeys={nodes.map((i) => i.id)} defaultSelectedKeys={[]} />
+                      <Sider
+                        data={nodes}
+                        openKeys={nodes.map((i) => i.id)}
+                        selectedKeys={selectedKeys}
+                        onSelect={({ selectedKeys }) => this.setState({ selectedKeys: selectedKeys! })}
+                      />
                     </Col>
                     <Col span={18}>
                       <div>文档不存在#{activeRoute}</div>
@@ -51,7 +74,12 @@ class ComponentPage extends React.Component<ComponentPageProps, any> {
                 <>
                   <DocumentTitle title={`${inject.title}-${node.data.title}`} />
                   <Col span={6}>
-                    <Sider data={nodes} openKeys={nodes.map((i) => i.id)} defaultSelectedKeys={[node.data.route]} />
+                    <Sider
+                      data={nodes}
+                      openKeys={nodes.map((i) => i.id)}
+                      selectedKeys={selectedKeys}
+                      onSelect={({ selectedKeys }) => this.setState({ selectedKeys: selectedKeys! })}
+                    />
                   </Col>
                   <Col span={18}>
                     <div style={{ padding: '20px 40px', maxWidth: 930 }}>

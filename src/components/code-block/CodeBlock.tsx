@@ -73,7 +73,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
     const { sections, meta, doc, error, loading } = this.state;
     if (error) {
       return (
-        <div className='v-page-markdown-load-error'>
+        <div className="v-page-markdown-load-error">
           {loading && <LoadingLine loading={loading} />}
           <h2>内容加载失败！</h2>
         </div>
@@ -81,7 +81,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
     }
     if (meta.toc === 'true') {
       return (
-        <div className='v-page-markdown'>
+        <div className="v-page-markdown">
           {loading && <LoadingLine loading={loading} />}
           <div>
             <MdBlock content={doc} />
@@ -90,13 +90,13 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
             {sections.map((i) => {
               if (i.data.toc === 'true' || i.data.only === 'true') {
                 return (
-                  <div key={i.data.route} className='v-md-section-container'>
+                  <div key={i.data.route} className="v-md-section-container">
                     <MdSection meta={i} />
                   </div>
                 );
               }
               return (
-                <div key={i.data.route} className='v-code-section-container'>
+                <div key={i.data.route} className="v-code-section-container">
                   <CodeSection meta={i} />
                 </div>
               );

@@ -5,7 +5,7 @@ export default {
 function loadMd(_n: string) {
   return {} as any;
 }
-function loadAssets(_n: string) {
-  return '';
+function loadAssets(n: string) {
+  return n;
 }
-export { loadMd , loadAssets};
+export { loadMd, loadAssets };

@@ -3,7 +3,8 @@ export function decodeSource(str: string) {
 }
 
 export function filterToc(str: string) {
-  return decodeSource(str).split(/^\s*-{3,}$/gm)
+  return decodeSource(str)
+    .split(/^\s*-{3,}$/gm)
     .slice(3)
     .join('');
 }

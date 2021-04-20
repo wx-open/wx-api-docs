@@ -31,7 +31,6 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
     await this.load();
   }
 
-
   private async load() {
     this.setState({ loading: true });
     const { meta } = this.props;
@@ -48,19 +47,17 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
     const { source, loading, desc } = this.state;
     const { meta } = this.props;
     return (
-      <div className='v-code-section'>
+      <div className="v-code-section">
         <h2>{meta.data.title}</h2>
         <p>{desc}</p>
         <div>
-          {
-            loading ? (
-              <div>加载中...</div>
-            ) : (
-              <div>
-                <MdBlock content={source} />
-              </div>
-            )
-          }
+          {loading ? (
+            <div>加载中...</div>
+          ) : (
+            <div>
+              <MdBlock content={source} />
+            </div>
+          )}
         </div>
       </div>
     );

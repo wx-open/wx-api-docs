@@ -1,8 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
-interface BaseProps {
-}
+interface BaseProps {}
 
 export type LoadingLineProps = {
   loading: boolean;
@@ -28,8 +27,7 @@ class LoadingLine extends React.Component<LoadingLineProps, LoadingLineState> {
   timer: any = null;
 
   componentDidMount() {
-    if (this.props.loading)
-      this.startTimer();
+    if (this.props.loading) this.startTimer();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: LoadingLineProps) {

@@ -1,10 +1,10 @@
-import * as React from "react";
-import data, { loadMd } from "./data";
+import * as React from 'react';
+import data, { loadMd } from './data';
 
 export interface MenuNode {
   id: string;
   pid: string;
-  children?: MenuNode[],
+  children?: MenuNode[];
   data: {
     title: string;
     route: string;
@@ -14,7 +14,7 @@ export interface MenuNode {
     toc: string;
     contextPath: string;
     only: string;
-  }
+  };
 }
 
 export interface LocalLoadData {
@@ -33,12 +33,12 @@ export interface ContextData extends LocalLoadData {
   inject: {
     title: string;
     logo: string;
-  }
+  };
 }
 
-const importData = data as unknown as ContextData;
+const importData = (data as unknown) as ContextData;
 const LocalContext = React.createContext<ContextData>({
-  ...importData
+  ...importData,
 });
 
 export function getNodeByRoute(treeData: MenuNode[], route: string): MenuNode | null {
@@ -57,9 +57,8 @@ export function getNodeByRoute(treeData: MenuNode[], route: string): MenuNode | 
   return result;
 }
 
-
 export function sleep(delay: number) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
 }

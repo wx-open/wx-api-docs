@@ -1,9 +1,9 @@
-import * as React from "react";
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-async";
-import theme from "react-syntax-highlighter/dist/esm/styles/prism/prism";
-import CopyOutlined from "@ant-design/icons/CopyOutlined";
-import { message } from "antd";
-import copyText from "copy-to-clipboard";
+import * as React from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-async';
+import theme from 'react-syntax-highlighter/dist/esm/styles/prism/prism';
+import CopyOutlined from '@ant-design/icons/CopyOutlined';
+import { message } from 'antd';
+import copyText from 'copy-to-clipboard';
 
 export interface CodeBoxProps {
   source: string;
@@ -13,12 +13,12 @@ export interface CodeBoxProps {
 class CodeBox extends React.Component<CodeBoxProps, any> {
   static propTypes = {};
   static defaultProps = {
-    language: "javascript"
+    language: 'javascript',
   };
   private handleCopy = () => {
     const { source } = this.props;
     if (copyText(source)) {
-      message.success("复制成功！").then();
+      message.success('复制成功！').then();
     }
   };
 

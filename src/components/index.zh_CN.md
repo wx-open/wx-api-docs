@@ -23,6 +23,9 @@ timeline: true
 [![prs][prs]][prs-url]
 [![download][download]][download-url]
 
+
+![Hello World](wx://assets/entry.jpg)
+
 ## Get Started ☆
 
 ### install
