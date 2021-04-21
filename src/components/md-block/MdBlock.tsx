@@ -2,6 +2,7 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown/with-html';
 import gfm from 'remark-gfm';
 import CodeBox from '../code-block/CodeBox';
+import Heading from './Heading';
 import { loadAssets } from '../../data';
 
 export interface MdBlockProps {
@@ -52,6 +53,9 @@ class MdBlock extends React.Component<MdBlockProps, any> {
           renderers={{
             code: ({ language, value }) => {
               return <CodeBox language={language} source={value} />;
+            },
+            heading:({level, children})=>{
+              return <Heading level={level} children={children} />
             },
           }}
         >
