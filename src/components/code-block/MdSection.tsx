@@ -55,7 +55,7 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
             <div>加载中...</div>
           ) : (
             <div>
-              <MdBlock content={source} />
+              <MdBlock hashList={meta.data.tocNodes} content={source} />
             </div>
           )}
         </div>

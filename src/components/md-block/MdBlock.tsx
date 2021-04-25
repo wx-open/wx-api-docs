@@ -59,7 +59,7 @@ class MdBlock extends React.Component<MdBlockProps, any> {
             },
             heading: ({ level, children }) => {
               return (
-                <Heading level={level} hash={hashList[i++].id}>
+                <Heading level={level} hash={hashList[i++]?.id}>
                   {children}
                 </Heading>
               );
