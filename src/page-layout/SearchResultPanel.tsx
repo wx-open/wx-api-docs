@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Empty } from 'antd';
-import { Link } from 'react-router-dom';
-import { MenuNode } from '../context';
+import { SearchResultItem } from '../routes/api-docs/helpers';
 
 export interface SearchResultPanelProps {
-  data: MenuNode[];
+  data: SearchResultItem[];
+  onClick?(obj: SearchResultItem): void;
 }
 
 class SearchResultPanel extends React.Component<SearchResultPanelProps, any> {
@@ -15,7 +15,12 @@ class SearchResultPanel extends React.Component<SearchResultPanelProps, any> {
   static defaultProps = {
     data: [],
   };
-
+  private handleClick = (i: SearchResultItem) => {
+    const { onClick } = this.props;
+    if (onClick) {
+      onClick(i);
+    }
+  };
   render() {
     const { data } = this.props;
     if (!data.length) {
@@ -30,9 +35,11 @@ class SearchResultPanel extends React.Component<SearchResultPanelProps, any> {
         <div>
           {data.map((i) => {
             return (
-              <div key={i.id}>
+              <div key={i.route}>
                 <div>
-                  <Link to={i.data.route}>{i.data.title}</Link>
+                  <div onClick={() => this.handleClick(i)}>
+                    <a href={`${i.route}`}>{i.title}</a>
+                  </div>
                 </div>
               </div>
             );

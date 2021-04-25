@@ -84,7 +84,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
         <div className="v-page-markdown">
           {loading && <LoadingLine loading={loading} />}
           <div>
-            <MdBlock content={doc} />
+            <MdBlock hashList={this.props.meta.data.tocNodes} content={doc} />
           </div>
           <div style={{ marginTop: 20 }}>
             {sections.map((i) => {

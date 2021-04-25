@@ -4,20 +4,20 @@ import { Link } from 'react-router-dom';
 import { Input } from 'antd';
 import Icon from '@ant-design/icons/es/components/Icon';
 import Logo from './Logo';
-import { ContextData, LocalContext, MenuNode } from '../context';
-import { search } from '../routes/api-docs/helpers';
+import { ContextData, LocalContext } from '../context';
+import { search, SearchResultItem } from '../routes/api-docs/helpers';
 import SearchResultPanel from './SearchResultPanel';
+import { RouteComponentProps, withRouter } from 'react-router';
 
-const { Search } = Input;
-
-export interface HeaderProps {
+export interface HeaderProps extends RouteComponentProps {
   title?: string;
   logo?: string;
 }
 
 export interface HeaderState {
-  searchData: MenuNode[];
+  searchData: SearchResultItem[];
   keyword: string;
+  showResult: boolean;
 }
 
 class Header extends React.Component<HeaderProps, HeaderState> {
@@ -31,14 +31,21 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   state: HeaderState = {
     searchData: [],
     keyword: '',
+    showResult: false,
   };
   private timer: number;
   private flag = true;
+
+  private handleFocus = () => {
+    if (this.state.keyword) {
+      this.setState({ showResult: true });
+    }
+  };
   private handleKeywordChange = (meta: ContextData['meta'], e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.currentTarget.value;
     const result = search(meta, keyword);
     clearTimeout(this.timer);
-    this.setState({ keyword });
+    this.setState({ keyword, showResult: true });
     this.timer = window.setTimeout(() => {
       if (this.flag) {
         this.setState({
@@ -53,10 +60,15 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   private handleCompositionEnd = () => {
     this.flag = true;
   };
+  private handleSearchNavClick = (i: SearchResultItem) => {
+    this.setState({ showResult: false }, () => {
+      this.props.history.push(i.route);
+    });
+  };
 
   render() {
     const { title, logo } = this.props;
-    const { searchData, keyword } = this.state;
+    const { searchData, keyword, showResult } = this.state;
     return (
       <LocalContext.Consumer>
         {({ meta }) => {
@@ -76,13 +88,14 @@ class Header extends React.Component<HeaderProps, HeaderState> {
                 <Input
                   placeholder="在文档中搜索"
                   onChange={(e) => this.handleKeywordChange(meta, e)}
+                  onFocus={(e) => this.handleFocus()}
                   className="v-page-search-input"
                   onCompositionStart={this.handleCompositionStart}
                   onCompositionEnd={this.handleCompositionEnd}
                 />
-                {this.flag && keyword && (
+                {this.flag && showResult && keyword && (
                   <div className="v-page-result-panel">
-                    <SearchResultPanel data={searchData} />
+                    <SearchResultPanel data={searchData} onClick={this.handleSearchNavClick} />
                   </div>
                 )}
               </div>
@@ -94,4 +107,4 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   }
 }
 
-export default Header;
+export default withRouter(Header);

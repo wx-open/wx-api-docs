@@ -126,6 +126,7 @@ function start(wrapper = (a) => a) {
   server.listen(port, host, (err) => {
     if (err) {
       console.error('ERROR:', err);
+      process.exit(-1);
       return;
     }
     const protocol = https ? 'https' : 'http';

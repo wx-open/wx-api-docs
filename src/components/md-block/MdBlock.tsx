@@ -4,9 +4,11 @@ import gfm from 'remark-gfm';
 import CodeBox from '../code-block/CodeBox';
 import Heading from './Heading';
 import { loadAssets } from '../../data';
+import { TocItem } from '../../context';
 
 export interface MdBlockProps {
   content: string;
+  hashList: TocItem[];
 }
 
 class MdBlock extends React.Component<MdBlockProps, any> {
@@ -16,7 +18,8 @@ class MdBlock extends React.Component<MdBlockProps, any> {
   };
 
   render() {
-    const { content } = this.props;
+    const { content, hashList } = this.props;
+    let i = 0;
     return (
       <div>
         <ReactMarkdown
@@ -54,8 +57,12 @@ class MdBlock extends React.Component<MdBlockProps, any> {
             code: ({ language, value }) => {
               return <CodeBox language={language} source={value} />;
             },
-            heading:({level, children})=>{
-              return <Heading level={level} children={children} />
+            heading: ({ level, children }) => {
+              return (
+                <Heading level={level} hash={hashList[i++].id}>
+                  {children}
+                </Heading>
+              );
             },
           }}
         >

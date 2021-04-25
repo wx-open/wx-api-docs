@@ -1,10 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Input } from 'antd';
 import { LocalContext } from '../context';
 import Header from './Header';
-
-const { Search } = Input;
 
 export interface PageLayoutProps {
   title?: string;

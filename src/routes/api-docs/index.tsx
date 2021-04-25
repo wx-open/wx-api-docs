@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Key } from 'react';
+import { Anchor } from 'antd';
 import Content from '../../page-layout/Content';
 import { getNodeByRoute, LocalContext } from '../../context';
 import { Col } from 'antd';
@@ -8,6 +9,7 @@ import Sider from '../../page-layout/NavMenu';
 import CodeBlock from '../../components/code-block';
 import PageLayout from '../../page-layout';
 import { RouteComponentProps } from 'react-router';
+const { Link } = Anchor;
 
 export interface ComponentPageProps extends RouteComponentProps<{ id: string }> {
   route: string;
@@ -81,10 +83,24 @@ class ComponentPage extends React.Component<ComponentPageProps, ComponentPageSta
                       onSelect={({ selectedKeys }) => this.setState({ selectedKeys: selectedKeys! })}
                     />
                   </Col>
-                  <Col span={18}>
+                  <Col span={12}>
                     <div style={{ padding: '20px 40px', maxWidth: 930 }}>
                       <CodeBlock meta={node} />
                     </div>
+                  </Col>
+
+                  <Col span={6}>
+                    <Anchor showInkInFixed={false} style={{ marginTop: 40 }}>
+                      {node.data.contents.map((n) => {
+                        return (
+                          <Link key={n.id} href={`#${n.id}`} title={n.title}>
+                            {n.children.map((i) => {
+                              return <Link key={i.id} href={`#${i.id}`} title={i.title} />;
+                            })}
+                          </Link>
+                        );
+                      })}
+                    </Anchor>
                   </Col>
                 </>
               );

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import data, { loadMd } from './data';
-
+export interface TocItem {
+  id: string;
+  title: string;
+  data: any;
+  children: TocItem[];
+}
 export interface MenuNode {
   id: string;
   pid: string;
@@ -14,6 +19,8 @@ export interface MenuNode {
     toc: string;
     contextPath: string;
     only: string;
+    contents: TocItem[];
+    tocNodes: TocItem[];
   };
 }
 
