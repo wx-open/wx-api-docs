@@ -34,6 +34,7 @@ module.exports = function getBabelConfig(modules) {
           loose: true,
         },
       ],
+      ["@babel/plugin-proposal-private-methods", { "loose": true }],
       [resolve('@babel/plugin-syntax-dynamic-import')],
       [resolve('@babel/plugin-transform-regenerator')],
       [
