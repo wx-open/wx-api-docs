@@ -6,6 +6,7 @@ module.exports = function getBabelConfig(modules) {
       [
         resolve('@babel/preset-env'),
         {
+          loose: true,
           modules,
           targets: {
             browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 9', 'iOS >= 8', 'Android >= 4'],
@@ -34,7 +35,7 @@ module.exports = function getBabelConfig(modules) {
           loose: true,
         },
       ],
-      ["@babel/plugin-proposal-private-methods", { "loose": true }],
+      ['@babel/plugin-proposal-private-methods', { loose: true }],
       [resolve('@babel/plugin-syntax-dynamic-import')],
       [resolve('@babel/plugin-transform-regenerator')],
       [

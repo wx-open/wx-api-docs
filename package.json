@@ -1,6 +1,6 @@
 {
   "name": "wx-api-docs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a simple docs from markdown",
   "main": "index.js",
   "types": "index.d.ts",
@@ -59,7 +59,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "peerDependencies": {
-    "wx-md-loader": "^1.0.0"
+    "wx-md-loader": "^1.0.12"
   },
   "dependencies": {
     "@types/classnames": "^2.2.9",
@@ -167,7 +167,6 @@
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3",
-    "webpackbar": "^5.0.0-3",
-    "wx-md-loader": "^1.0.9"
+    "webpackbar": "^5.0.0-3"
   }
 }
