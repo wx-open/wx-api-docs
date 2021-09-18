@@ -3,6 +3,9 @@ import { Tabs } from 'antd';
 import CodeBox from './CodeBox';
 import * as ReactDOM from 'react-dom';
 import { loadMd, MenuNode } from '../../context';
+import { filterToc } from './helper';
+import { MdBlock } from '../index';
+import MdExecBlock from '../md-block/MdExecBlock';
 
 const { TabPane } = Tabs;
 
@@ -17,6 +20,7 @@ export interface CodeSectionState {
   type: string;
   title: string;
   error: boolean;
+  md: string;
 }
 
 class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
@@ -28,10 +32,11 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
     desc: '',
     title: '',
     type: '',
+    md: '',
     error: false,
   };
   private mounted = false;
-  private mount: Function = () => {};
+  private mount: [Function, string][];
 
   async componentDidMount() {
     await this.load();
@@ -43,12 +48,13 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
     const n = meta.data.contextPath;
     try {
       const doc = await loadMd(n);
-      this.mount = doc.code;
+      this.mount = doc.codes;
       this.setState({
         loading: false,
         source: decodeURIComponent(doc.html.content),
         type: doc.html.type,
         desc: doc.html.desc,
+        md: filterToc(doc.html.source),
       });
     } catch (e) {
       console.log(e);
@@ -59,7 +65,7 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
     }
   }
 
-  private onRef = (ele: HTMLDivElement | null) => {
+  private onRef = (codeIndex: number) => (ele: HTMLDivElement | null) => {
     if (!ele) {
       return;
     }
@@ -69,10 +75,11 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
     codeBox.appendChild(codeBlock);
     ele.appendChild(codeBox);
     const { type } = this.state;
+    if (typeof this.mount[codeIndex][0] !== 'function') {
+      return;
+    }
     if (type === 'js' || type === 'ts') {
-      if (typeof this.mount !== 'function') {
-      }
-      this.mount({
+      this.mount[codeIndex][0]({
         mount: async (container: HTMLElement | null) => {
           if (this.mounted) {
             return;
@@ -87,12 +94,12 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
       return;
     }
     if (type === 'jsx' || type === 'tsx') {
-      ReactDOM.render(React.createElement(this.mount as any, {}), codeBlock);
+      ReactDOM.render(React.createElement(this.mount[codeIndex][0] as any, {}), codeBlock);
     }
   };
 
   render() {
-    const { source, loading, desc, error } = this.state;
+    const { loading, desc, error, md } = this.state;
     const { meta } = this.props;
     if (error) {
       return (
@@ -103,28 +110,20 @@ class CodeSection extends React.Component<CodeSectionProps, CodeSectionState> {
         </div>
       );
     }
+    if (meta.data.only === 'true') {
+      return (
+        <div className="v-code-section">
+          <h2>{meta.data.title}</h2>
+          <p>{desc}</p>
+          <MdBlock hashList={meta.data.tocNodes} content={md} />
+        </div>
+      );
+    }
     return (
       <div className="v-code-section">
         <h2>{meta.data.title}</h2>
         <p>{desc}</p>
-        <div>
-          <Tabs defaultActiveKey="result">
-            <TabPane tab="效果" key="result">
-              <div>
-                {loading ? (
-                  <div>加载中....</div>
-                ) : (
-                  <div>
-                    <div ref={this.onRef} />
-                  </div>
-                )}
-              </div>
-            </TabPane>
-            <TabPane tab="源码" key="source">
-              <div>{source && <CodeBox source={source} />}</div>
-            </TabPane>
-          </Tabs>
-        </div>
+        <MdExecBlock hashList={meta.data.tocNodes} content={md} loading={loading} mounts={this.mount} />
       </div>
     );
   }

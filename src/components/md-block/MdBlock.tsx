@@ -5,10 +5,11 @@ import CodeBox from '../code-block/CodeBox';
 import Heading from './Heading';
 import { loadAssets } from '../../data';
 import { TocItem } from '../../context';
-
+import img404 from '../../assets/404.png';
 export interface MdBlockProps {
   content: string;
   hashList: TocItem[];
+  renderCode?: ({ language, value, codeIndex }: { language: string; value: string; codeIndex: number }) => any;
 }
 
 class MdBlock extends React.Component<MdBlockProps, any> {
@@ -18,8 +19,9 @@ class MdBlock extends React.Component<MdBlockProps, any> {
   };
 
   render() {
-    const { content, hashList } = this.props;
+    const { content, hashList, renderCode } = this.props;
     let i = 0;
+    let codeIndex = 0;
     return (
       <div>
         <ReactMarkdown
@@ -29,7 +31,14 @@ class MdBlock extends React.Component<MdBlockProps, any> {
             const reg = /^wx:\/\/(.+?\.(?:jpg|png|bmp|gif|webp|jpeg))$/;
             if (reg.test(uri)) {
               const [, path] = uri.match(reg)!;
-              return loadAssets(path);
+              if (reg.test(uri)) {
+                const [, path] = uri.match(reg)!;
+                try {
+                  return loadAssets(path);
+                } catch (e) {
+                  return img404;
+                }
+              }
             }
             return uri;
           }}
@@ -54,8 +63,13 @@ class MdBlock extends React.Component<MdBlockProps, any> {
           }}
           plugins={[[gfm, { singleTilde: false }]]}
           renderers={{
-            code: ({ language, value }) => {
-              return <CodeBox language={language} source={value} />;
+            code: (obj) => {
+              const { language, value } = obj;
+              return renderCode ? (
+                renderCode({ language, value, codeIndex: codeIndex++ })
+              ) : (
+                <CodeBox language={language} source={value} />
+              );
             },
             heading: ({ level, children }) => {
               return (

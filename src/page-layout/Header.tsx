@@ -12,6 +12,8 @@ import { RouteComponentProps, withRouter } from 'react-router';
 export interface HeaderProps extends RouteComponentProps {
   title?: string;
   logo?: string;
+  showMenu?: boolean;
+  onMenuTriggerClick?: () => void;
 }
 
 export interface HeaderState {
@@ -67,7 +69,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   };
 
   render() {
-    const { title, logo } = this.props;
+    const { title, logo, showMenu } = this.props;
     const { searchData, keyword, showResult } = this.state;
     return (
       <LocalContext.Consumer>
@@ -75,12 +77,21 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           return (
             <div className="v-page-header">
               <div className="v-page-logo">
-                <div>
-                  <Link to="/">
-                    {logo ? <img src={logo} alt={title} /> : <Icon className="v-page-icon" component={Logo} />}
-                  </Link>
-                </div>
-                <div className="v-page-logo-title">
+                {!showMenu ? (
+                  <div title={title}>
+                    <Link to="/">
+                      {logo ? <img src={logo} alt={title} /> : <Icon className="v-page-icon" component={Logo} />}
+                    </Link>
+                  </div>
+                ) : (
+                  <Icon
+                    className="v-page-icon v-page-header-menu-trigger"
+                    component={Logo}
+                    title={title}
+                    onClick={this.props.onMenuTriggerClick}
+                  />
+                )}
+                <div className="v-page-logo-title" title={title}>
                   <Link to="/">{title}</Link>
                 </div>
               </div>

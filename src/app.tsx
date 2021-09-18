@@ -25,7 +25,7 @@ class App extends React.Component<any, any> {
                 <Route
                   exact
                   key={i.route}
-                  path={`${i.route}/:id?`}
+                  path={`${i.route}${/\/$/.test(i.route) ? '' : '/'}:id?`}
                   render={(props: RouteComponentProps<{ id: string }>) => <ComponentPage {...props} route={i.route} />}
                 />
               ))}

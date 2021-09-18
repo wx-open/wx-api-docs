@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom';
 import { loadMd, MenuNode } from '../../context';
 import MdBlock from '../md-block/MdBlock';
 import { filterToc } from './helper';
+import MdExecBlock from '../md-block/MdExecBlock';
 
 const { TabPane } = Tabs;
 
@@ -26,7 +27,7 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
     source: '',
     desc: '',
   };
-
+  private mount: [Function, string, object][] = [];
   async componentDidMount() {
     await this.load();
   }
@@ -36,6 +37,7 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
     const { meta } = this.props;
     const n = meta.data.contextPath;
     const doc = await loadMd(n);
+    this.mount = doc.codes;
     this.setState({
       loading: false,
       desc: doc.html.desc,
@@ -55,7 +57,7 @@ class MdSection extends React.Component<CodeSectionProps, CodeSectionState> {
             <div>加载中...</div>
           ) : (
             <div>
-              <MdBlock hashList={meta.data.tocNodes} content={source} />
+              <MdExecBlock loading={loading} mounts={this.mount} hashList={meta.data.tocNodes} content={source} />
             </div>
           )}
         </div>

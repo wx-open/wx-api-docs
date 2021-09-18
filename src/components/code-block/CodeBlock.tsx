@@ -4,7 +4,8 @@ import { loadMd, MenuNode } from '../../context';
 import CodeSection from './CodeSection';
 import LoadingLine from '../load-line';
 import MdSection from './MdSection';
-import { filterToc } from './helper';
+import { filterToc, formatDateTime } from './helper';
+import MdExecBlock from '../md-block/MdExecBlock';
 
 export interface CodeBlockProps {
   meta: MenuNode;
@@ -16,6 +17,9 @@ export interface CodeBlockState {
   doc: string;
   sections: MenuNode[];
   error: boolean;
+  source: string[];
+  createTime: string;
+  updateTime: string;
 }
 
 class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
@@ -25,10 +29,13 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
     loading: true,
     meta: {},
     doc: '',
+    createTime: '',
+    updateTime: '',
+    source: [],
     sections: [],
     error: false,
   };
-
+  private mount: [Function, string][] = [];
   async componentDidMount() {
     await this.load();
   }
@@ -47,6 +54,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
       const { meta } = this.props;
       const n = meta.data.contextPath;
       const doc = await loadMd(n);
+      this.mount = doc.codes;
       let sections: MenuNode[] = [];
       if (meta) {
         const { children } = meta;
@@ -57,7 +65,10 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
       this.setState({
         loading: false,
         meta: doc.html.meta,
+        createTime: formatDateTime(doc.html.ctime),
+        updateTime: formatDateTime(doc.html.mtime),
         sections,
+        source: [decodeURIComponent(doc.html.content)],
         doc: filterToc(doc.html.source),
       });
     } catch (e) {
@@ -70,7 +81,7 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
   }
 
   render() {
-    const { sections, meta, doc, error, loading } = this.state;
+    const { sections, meta, doc, error, updateTime, loading } = this.state;
     if (error) {
       return (
         <div className="v-page-markdown-load-error">
@@ -84,11 +95,20 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
         <div className="v-page-markdown">
           {loading && <LoadingLine loading={loading} />}
           <div>
-            <MdBlock hashList={this.props.meta.data.tocNodes} content={doc} />
+            {meta.only === 'true' ? (
+              <MdBlock hashList={this.props.meta.data.tocNodes} content={doc} />
+            ) : (
+              <MdExecBlock
+                mounts={this.mount}
+                loading={loading}
+                hashList={this.props.meta.data.tocNodes}
+                content={doc}
+              />
+            )}
           </div>
           <div style={{ marginTop: 20 }}>
             {sections.map((i) => {
-              if (i.data.toc === 'true' || i.data.only === 'true') {
+              if (i.data.only !== 'true') {
                 return (
                   <div key={i.data.route} className="v-md-section-container">
                     <MdSection meta={i} />
@@ -101,6 +121,9 @@ class CodeBlock extends React.Component<CodeBlockProps, CodeBlockState> {
                 </div>
               );
             })}
+          </div>
+          <div className="v-page-footer-time">
+            <div>❤ 更新于：{updateTime}</div>
           </div>
         </div>
       );

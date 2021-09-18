@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Key } from 'react';
-import { Anchor } from 'antd';
+import { Link } from 'react-router-dom';
+import { Anchor, Drawer, Empty, Row } from 'antd';
 import Content from '../../page-layout/Content';
 import { getNodeByRoute, LocalContext } from '../../context';
 import { Col } from 'antd';
@@ -9,7 +10,6 @@ import Sider from '../../page-layout/NavMenu';
 import CodeBlock from '../../components/code-block';
 import PageLayout from '../../page-layout';
 import { RouteComponentProps } from 'react-router';
-const { Link } = Anchor;
 
 export interface ComponentPageProps extends RouteComponentProps<{ id: string }> {
   route: string;
@@ -17,13 +17,15 @@ export interface ComponentPageProps extends RouteComponentProps<{ id: string }> 
 
 export interface ComponentPageState {
   selectedKeys: Key[];
+  showDrawer: boolean;
 }
 
 class ComponentPage extends React.Component<ComponentPageProps, ComponentPageState> {
   static propTypes = {};
   static defaultProps = {};
-  state = {
+  public state: ComponentPageState = {
     selectedKeys: [],
+    showDrawer: false,
   };
 
   static getDerivedStateFromProps(nextProps: ComponentPageProps, prevState: ComponentPageState) {
@@ -38,9 +40,14 @@ class ComponentPage extends React.Component<ComponentPageProps, ComponentPageSta
   render() {
     const { route } = this.props;
     const { id } = this.props.match.params;
-    const { selectedKeys } = this.state;
+    const { selectedKeys, showDrawer } = this.state;
     return (
-      <PageLayout>
+      <PageLayout
+        showMenu
+        onMenuTriggerClick={() => {
+          this.setState({ showDrawer: true });
+        }}
+      >
         <Content activeId={id}>
           <LocalContext.Consumer>
             {({ meta, inject }) => {
@@ -58,50 +65,74 @@ class ComponentPage extends React.Component<ComponentPageProps, ComponentPageSta
                 return (
                   <>
                     <DocumentTitle title={`${inject.title}-文档走丢了`} />
-                    <Col span={6}>
+                    <div className="v-page-body-side-menu">
                       <Sider
                         data={nodes}
                         openKeys={nodes.map((i) => i.id)}
-                        selectedKeys={selectedKeys}
+                        selectedKeys={selectedKeys as string[]}
                         onSelect={({ selectedKeys }) => this.setState({ selectedKeys: selectedKeys! })}
                       />
-                    </Col>
-                    <Col span={18}>
-                      <div>文档不存在#{activeRoute}</div>
-                    </Col>
+                    </div>
+                    <div className="v-page-body-doc-main">
+                      <div style={{ padding: '20px 40px', maxWidth: 930, margin: ' 0 auto' }}>
+                        <Empty description={'文档走丢了'} imageStyle={{ height: 400 }} />
+                      </div>
+                    </div>
                   </>
                 );
               }
               return (
                 <>
                   <DocumentTitle title={`${inject.title}-${node.data.title}`} />
-                  <Col span={6}>
+                  <Drawer
+                    onClose={() => this.setState({ showDrawer: false })}
+                    visible={showDrawer}
+                    mask
+                    maskClosable
+                    keyboard
+                    placement="left"
+                    width={400}
+                  >
+                    <div>
+                      <div>
+                        <Link to="/">首页</Link>
+                      </div>
+                      <Sider
+                        data={nodes}
+                        openKeys={nodes.map((i) => i.id)}
+                        selectedKeys={selectedKeys as string[]}
+                        onSelect={({ selectedKeys }) =>
+                          this.setState({ selectedKeys: selectedKeys!, showDrawer: false })
+                        }
+                      />
+                    </div>
+                  </Drawer>
+                  <div className="v-page-body-side-menu">
                     <Sider
                       data={nodes}
                       openKeys={nodes.map((i) => i.id)}
-                      selectedKeys={selectedKeys}
+                      selectedKeys={selectedKeys as string[]}
                       onSelect={({ selectedKeys }) => this.setState({ selectedKeys: selectedKeys! })}
                     />
-                  </Col>
-                  <Col span={12}>
-                    <div style={{ padding: '20px 40px', maxWidth: 930 }}>
+                  </div>
+                  <div className="v-page-body-doc-main">
+                    <div style={{ padding: '20px 40px', maxWidth: 930, margin: ' 0 auto' }}>
                       <CodeBlock meta={node} />
                     </div>
-                  </Col>
-
-                  <Col span={6}>
+                  </div>
+                  <div className="v-page-body-anchor-list">
                     <Anchor showInkInFixed={false} style={{ marginTop: 40 }}>
                       {node.data.contents.map((n) => {
                         return (
-                          <Link key={n.id} href={`#${n.id}`} title={n.title}>
+                          <Anchor.Link key={n.id} href={`#${n.id}`} title={n.title}>
                             {n.children.map((i) => {
-                              return <Link key={i.id} href={`#${i.id}`} title={i.title} />;
+                              return <Anchor.Link key={i.id} href={`#${i.id}`} title={i.title} />;
                             })}
-                          </Link>
+                          </Anchor.Link>
                         );
                       })}
                     </Anchor>
-                  </Col>
+                  </div>
                 </>
               );
             }}

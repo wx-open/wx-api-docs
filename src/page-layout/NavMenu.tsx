@@ -62,7 +62,7 @@ const Sider: React.FunctionComponent<SiderProps> = (props) => {
       selectedKeys={selectedKeys}
       openKeys={openKeys as string[]}
       onOpenChange={onOpenChange}
-      style={{ width: 260 }}
+      style={{ width: 300 }}
       onSelect={onSelect}
     >
       {renderMenu(menuData)}

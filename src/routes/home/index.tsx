@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import PageLayout from '../../page-layout';
 import { LocalContext } from '../../context';
 import DocumentTitle from 'react-document-title';
 import { getFirstRoute } from '../api-docs/helpers';
 
-export interface HomeProps {}
+export interface HomeProps extends RouteComponentProps {}
 
 class Home extends React.Component<HomeProps, any> {
   static propTypes = {};
   static defaultProps = {};
+  context: typeof LocalContext;
+  componentDidMount() {
+    console.log(this.context);
+  }
 
   render() {
     return (

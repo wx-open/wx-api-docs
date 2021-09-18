@@ -1,4 +1,4 @@
-@import "../../../styles/theme";
+@import '../../../styles/theme';
 
 .v-code-source-container {
   > pre {
@@ -31,8 +31,13 @@
 .v-code-section {
   border: 1px solid #eeecec;
   padding: 20px;
-
-
+  margin-bottom: 20px;
+}
+.v-exec-code-section {
+  border: 1px solid rgb(240, 240, 240);
+  padding: 20px;
+  cursor: default;
+  margin-bottom: 20px;
   &:hover {
     border-color: @v-theme-primary-color;
   }
@@ -46,9 +51,8 @@
 }
 
 .v-code-block {
-  border: 1px solid #ddd;
+  border: 1px solid #efefef;
   padding: 10px;
   min-width: 400px;
   min-height: 240px;
 }
-

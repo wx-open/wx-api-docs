@@ -6,6 +6,8 @@ import Header from './Header';
 export interface PageLayoutProps {
   title?: string;
   logo?: string;
+  onMenuTriggerClick?: () => void;
+  showMenu?: boolean;
 }
 
 class PageLayout extends React.Component<PageLayoutProps, any> {
@@ -18,7 +20,7 @@ class PageLayout extends React.Component<PageLayoutProps, any> {
   };
 
   render() {
-    const { title: propTitle, logo: propLogo, children } = this.props;
+    const { title: propTitle, logo: propLogo, showMenu, children } = this.props;
     return (
       <LocalContext.Consumer>
         {({ meta, inject: { title: contextTitle, logo: contextLogo } }) => {
@@ -26,7 +28,12 @@ class PageLayout extends React.Component<PageLayoutProps, any> {
           const title = propTitle || contextTitle;
           return (
             <div className="v-page">
-              <Header title={title} logo={logo} />
+              <Header
+                showMenu={showMenu}
+                title={title}
+                logo={logo}
+                onMenuTriggerClick={this.props.onMenuTriggerClick}
+              />
               <div className="v-page-body">{children}</div>
             </div>
           );
