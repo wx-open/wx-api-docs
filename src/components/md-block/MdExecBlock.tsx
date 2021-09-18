@@ -152,6 +152,13 @@ class MdExecBlock extends React.Component<MdBlockProps, any> {
                 </Heading>
               );
             },
+            link: ({ href, children }) => {
+              return (
+                <a href={href} referrerPolicy="no-referrer" target="_blank" rel="noreferrer">
+                  {children}
+                </a>
+              );
+            },
           }}
         >
           {content}
