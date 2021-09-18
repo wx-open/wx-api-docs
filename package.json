@@ -1,6 +1,6 @@
 {
   "name": "wx-api-docs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "a simple docs from markdown",
   "main": "index.js",
   "types": "index.d.ts",
@@ -58,9 +58,6 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "peerDependencies": {
-    "wx-md-loader": "^1.0.12"
-  },
   "dependencies": {
     "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
@@ -74,6 +71,7 @@
     "react-syntax-highlighter": "^15.4.3",
     "remark-gfm": "^1.0.0",
     "omit.js": "^2.0.2",
+    "copy-to-clipboard": "^3.3.1",
     "@types/react": "^17.0.3",
     "@types/react-copy-to-clipboard": "^5.0.0",
     "@types/react-document-title": "^2.0.4",
@@ -127,7 +125,6 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "clean-webpack-plugin": "^3.0.0",
     "codecov": "^3.8.1",
-    "copy-to-clipboard": "^3.3.1",
     "copy-webpack-plugin": "^6.4.1",
     "cross-env": "^7.0.3",
     "css-loader": "^0.25.0",
@@ -171,6 +168,6 @@
     "webpack-filter-warnings-plugin": "^1.2.1",
     "webpack-merge": "^5.7.3",
     "webpackbar": "^5.0.0-3",
-    "wx-md-loader": "^1.0.12"
+    "wx-md-loader": "^2.0.0"
   }
 }

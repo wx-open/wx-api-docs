@@ -1,4 +1,5 @@
 const path = require('path');
+const fs  = require('fs');
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -32,13 +33,16 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
   const injectScripts = wxConfig.injectScripts || [];
   const injectStyles = wxConfig.injectStyles || [];
   const distPath = getOutputDir();
-  const copyPatterns = [
-    {
-      from: getProjectPath('public'),
-      to: distPath,
-      noErrorOnMissing: true,
-    },
-  ];
+  const pubPath = getProjectPath('public');
+  const copyPatterns = fs.existsSync(pubPath)
+    ? [
+        {
+          from: getProjectPath('public'),
+          to: distPath,
+          noErrorOnMissing: true,
+        },
+      ]
+    : [];
   const config = {
     entry: path.resolve(root, './src/index.ts'),
     output: {
