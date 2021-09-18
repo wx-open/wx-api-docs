@@ -93,6 +93,7 @@ npm run docs:build
 `cate`为当前文档所属分组， 不存在时则显示为根目录；
 `title`为目录显示的标题信息
 `toc`控制是否文档显示在目录中
+`only`不解析代码块
 
 ```markdown
 ---

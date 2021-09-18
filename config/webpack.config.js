@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniExtractWebpackPlugin = require('mini-css-extract-plugin');
@@ -9,7 +9,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const getBabelConfig = require('./babel.config');
 const { merge: webpackMerge } = require('webpack-merge');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-
+const { getProjectPath } = require('./base');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const { getRootPath, getOutputDir, getHolderPath, getWxConfig } = require('./base');
 const root = getRootPath();
 const MiniExtractLoader = {
@@ -30,10 +31,18 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
   const htmlIcon = wxConfig.inject.favicon || path.resolve(root, 'src/assets/favicon.ico');
   const injectScripts = wxConfig.injectScripts || [];
   const injectStyles = wxConfig.injectStyles || [];
+  const distPath = getOutputDir();
+  const copyPatterns = [
+    {
+      from: getProjectPath('public'),
+      to: distPath,
+      noErrorOnMissing: true,
+    },
+  ];
   const config = {
     entry: path.resolve(root, './src/index.ts'),
     output: {
-      path: getOutputDir(),
+      path: distPath,
       filename: 'static/js/[name].[hash].js',
       publicPath: '/',
       libraryTarget: 'umd',
@@ -220,6 +229,12 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
     },
     plugins: [
       new CleanWebpackPlugin(),
+      new CopyWebpackPlugin({
+        patterns: copyPatterns,
+      }),
+      new FilterWarningsPlugin({
+        exclude: /mini-css-extract-plugin[^]*Conflicting order/,
+      }),
       new CaseSensitivePathsPlugin(),
       new webpack.BannerPlugin({
         banner: `

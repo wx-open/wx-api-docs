@@ -13,9 +13,14 @@ function getOutputDir() {
   return path.resolve(root, 'sites');
 }
 
+function getProjectPath(...dir) {
+  const root = process.cwd();
+  return path.resolve(root, ...dir);
+}
+
 function getDevServerOutputDir() {
   const root = process.cwd();
-  return path.resolve(root, '_sites');
+  return path.resolve(root, 'sites');
 }
 
 function getHolderPath() {
@@ -33,6 +38,8 @@ function getWxConfig(cwd = process.cwd()) {
       '//cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js',
     ],
     injectStyles: ['//cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css'],
+    copyPatterns: [],
+    copyPaths: ['public'],
   };
   if (fs.existsSync(file)) {
     try {
@@ -58,4 +65,4 @@ function getWxConfig(cwd = process.cwd()) {
   };
 }
 
-module.exports = { getRootPath, getWxConfig, getHolderPath, getOutputDir, getDevServerOutputDir };
+module.exports = { getRootPath, getWxConfig, getProjectPath, getHolderPath, getOutputDir, getDevServerOutputDir };
