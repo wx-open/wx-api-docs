@@ -61,3 +61,8 @@ export function getFirstRoute(nodes: MenuNode[]): MenuNode | null {
   }
   return node || null;
 }
+
+export function parseAnchor(ss: string) {
+  const r = ss.trim().match(/<(\w+)([^<>]*>)([^<>]+)<\/\1>/);
+  return r ? r[3] : ss.trim();
+}

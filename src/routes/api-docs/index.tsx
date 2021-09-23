@@ -10,6 +10,7 @@ import Sider from '../../page-layout/NavMenu';
 import CodeBlock from '../../components/code-block';
 import PageLayout from '../../page-layout';
 import { RouteComponentProps } from 'react-router';
+import { parseAnchor } from './helpers';
 
 export interface ComponentPageProps extends RouteComponentProps<{ id: string }> {
   route: string;
@@ -126,7 +127,7 @@ class ComponentPage extends React.Component<ComponentPageProps, ComponentPageSta
                         return (
                           <Anchor.Link key={n.id} href={`#${n.id}`} title={n.title}>
                             {n.children.map((i) => {
-                              return <Anchor.Link key={i.id} href={`#${i.id}`} title={i.title} />;
+                              return <Anchor.Link key={i.id} href={`#${i.id}`} title={parseAnchor(i.title)} />;
                             })}
                           </Anchor.Link>
                         );
