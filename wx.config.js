@@ -8,6 +8,7 @@ module.exports = {
   },
   cwd: path.resolve(__dirname, './src'),
   template: path.resolve(__dirname, './src'),
+  sniffChangeLog: true,
   groups: [
     {
       order: 2,

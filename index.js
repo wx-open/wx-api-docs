@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const os = require('os');
+const path = require('path');
+const fs = require('fs');
 const webpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 const getWebpackConfig = require('./config/webpack.config');
@@ -61,7 +63,7 @@ function ans() {
   });
 }
 
-function build() {
+function build(callback) {
   const webpackConfig = getWebpackConfig({
     mode: 'production',
   });
@@ -77,7 +79,24 @@ function build() {
       console.log(chalk.yellow(stat.toString('minimal')));
     }
     console.log(chalk.bgGreen(chalk.black(' DONE ')) + chalk.green(' success !'));
+    callback && callback();
   });
+}
+
+function buildWithChangeLog(callback) {
+  const wxConfig = getWxConfig();
+  if (wxConfig.sniffChangeLog) {
+    insertChangeLog((obj) => {
+      build(() => {
+        callback && callback();
+        if (obj) {
+          obj.remove();
+        }
+      });
+    });
+    return;
+  }
+  build(callback);
 }
 
 function start(wrapper = (a) => a) {
@@ -154,4 +173,99 @@ function getLocalIp() {
   }
   return null;
 }
-module.exports = { ans, build, start };
+
+/**
+ * @param callback
+ */
+function insertChangeLog(callback) {
+  const cwd = process.cwd();
+  const changeLogFile = path.resolve(cwd, 'CHANGELOG.md');
+  if (!fs.existsSync(changeLogFile)) {
+    callback && callback(false);
+    return;
+  }
+  const config = getWxConfig(cwd);
+  try {
+    const { cwd, groups } = config;
+    if (!cwd) {
+      console.error('请指定文档基准路径！');
+      callback && callback(false);
+      return;
+    }
+    if (!groups.length) {
+      console.error('未找到文档分组信息！');
+      callback && callback(false);
+      return;
+    }
+    const group = groups.sort((a, b) => {
+      const oa = Number(a.order);
+      const ob = Number(b.order);
+      return !isNaN(oa) && !isNaN(ob) ? oa - ob : isNaN(oa) ? 1 : isNaN(ob) ? -1 : 0;
+    })[0];
+    const sniffConfig = config.sniffChangeLog;
+    const defaultSc = {
+      changeLogKey: 'CHANGELOG',
+      title: '更新日志',
+      order: -9999999,
+      toc: true,
+      timeline: true,
+      only: true,
+      desc: '这是一个日志说明',
+    };
+    const isValidNode = () => {
+      return typeof sniffConfig === 'object' && !Array.isArray(sniffConfig) && sniffConfig !== null;
+    };
+    const sc = typeof sniffConfig === 'boolean' ? defaultSc : { ...defaultSc, ...(isValidNode() ? sniffConfig : {}) };
+    const changeLogKey = sc.changeLogKey || 'CHANGELOG';
+    const insertPath = path.resolve(cwd, group.basePath, `${changeLogKey}.md`);
+    const mdSrc = fs.readFileSync(changeLogFile, 'utf-8');
+    fs.writeFileSync(
+      insertPath,
+      `---
+order: ${sc.order}
+title: ${sc.title}
+toc: ${sc.toc}
+timeline: ${sc.timeline}
+only: ${sc.only}
+
+---
+
+这是一个更新日志
+
+---
+
+${mdSrc}
+`
+    );
+
+    function clear() {
+      if (fs.existsSync(insertPath)) {
+        fs.unlinkSync(insertPath);
+      }
+      process.exit(0);
+    }
+
+    process.once('SIGINT', () => {
+      clear();
+    });
+    process.once('uncaughtException', () => {
+      clear();
+    });
+    process.once('unhandledRejection', () => {
+      clear();
+    });
+    callback &&
+      callback({
+        insertPath,
+        remove: () => {
+          return fs.unlinkSync(insertPath);
+        },
+      });
+  } catch (e) {
+    console.error(e);
+    console.error('changeLog 配置解析异常！');
+    process.exit(-1);
+  }
+}
+
+module.exports = { ans, build: buildWithChangeLog, start };
