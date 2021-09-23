@@ -19,7 +19,7 @@ class Heading extends React.Component<HeadingProps, any> {
         <a href={`#${hash}`} className="v-md-block-heading-anchor">
           <span>#</span>
         </a>
-        <span>{children}</span>
+        <span className="v-md-block-heading-anchor-title">{children}</span>
       </div>
     );
   }

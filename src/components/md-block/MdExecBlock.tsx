@@ -154,7 +154,12 @@ class MdExecBlock extends React.Component<MdBlockProps, any> {
             },
             link: ({ href, children }) => {
               return (
-                <a href={href} referrerPolicy="no-referrer" target="_blank" rel="noreferrer">
+                <a
+                  href={href}
+                  referrerPolicy="no-referrer"
+                  target={/^[\/|#]/.test(href) ? '_self' : '_blank'}
+                  rel="noreferrer"
+                >
                   {children}
                 </a>
               );
