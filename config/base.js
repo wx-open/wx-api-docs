@@ -27,12 +27,19 @@ function getHolderPath() {
   return path.resolve(root, 'src/data.ts');
 }
 
-function getWxConfig(cwd = process.cwd()) {
+let temp;
+
+function getWxConfig(cwd = process.cwd(), force = false) {
+  if (temp && force !== true) {
+    return temp;
+  }
   const file = path.resolve(cwd, 'wx.config.js');
   const defaultInjects = {
     server: (c) => c,
     webpack: (c) => c,
     port: 8020,
+    sniffChangeLog: false,
+    changeLogKey: 'CHANGELOG',
     injectScripts: [
       '//cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js',
       '//cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js',
@@ -45,7 +52,7 @@ function getWxConfig(cwd = process.cwd()) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const config = require(file);
-      return {
+      temp = {
         ...defaultInjects,
         ...config,
         inject: {
@@ -53,16 +60,18 @@ function getWxConfig(cwd = process.cwd()) {
           ...config.inject,
         },
       };
+      return temp;
     } catch (e) {
       console.error(e);
     }
   }
-  return {
+  temp = {
     ...defaultInjects,
     inject: {
       title: 'Wx API Docs',
     },
   };
+  return temp;
 }
 
 module.exports = { getRootPath, getWxConfig, getProjectPath, getHolderPath, getOutputDir, getDevServerOutputDir };

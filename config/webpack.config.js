@@ -1,5 +1,5 @@
 const path = require('path');
-const fs  = require('fs');
+const fs = require('fs');
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -233,9 +233,6 @@ module.exports = function getWebpackConfig(options = {}, extraConfig = {}) {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new CopyWebpackPlugin({
-        patterns: copyPatterns,
-      }),
       new FilterWarningsPlugin({
         exclude: /mini-css-extract-plugin[^]*Conflicting order/,
       }),
@@ -269,6 +266,14 @@ All rights reserved.
       }),
     ],
   };
+
+  if (copyPatterns.length) {
+    config.plugins.unshift(
+      new CopyWebpackPlugin({
+        patterns: copyPatterns,
+      })
+    );
+  }
   const result = webpackMerge(config, extraConfig);
   return configWrapper(result) || result;
 };
